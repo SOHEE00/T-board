@@ -1,0 +1,389 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+                margin: 0;
+                padding: 0;
+                display: flex;
+                background-color: #f0f0f0;
+                align-items: center;
+                justify-content: center;
+                color :rgb(62, 62, 62);
+            }
+
+.container {
+    display: flex;
+}
+.btn {
+    background-color: #666666;  /* 배경색 */
+    color: white;              /* 글자색 */
+    margin : 4 0px;
+    margin-left: 10px;
+    padding: 6px 13px;        /* 내부 여백 */
+    border-radius: 8px;        /* 테두리 둥글게 */
+    border: 2px solid #666666;  /* 테두리 */
+    font-size: 14px;           /* 글꼴 크기 */
+    transition: background-color 0.3s ease; /* 배경색 변화 효과 */
+}
+
+.btn:hover {
+    background-color: #cccccc; /* 마우스 오버시 배경색 */
+}
+
+.btn:active {
+    background-color: #666666; /* 클릭시 배경색 */
+    border-color: #666666;     /* 클릭시 테두리색 */
+    transform: translateY(2px); /* 클릭시 살짝 내려가는 효과 */
+}
+
+.btn:disabled {
+    background-color: #cccccc; /* 비활성화시 배경색 */
+    border-color: #cccccc;     /* 비활성화시 테두리색 */
+    color: #666666;            /* 비활성화시 글자색 */
+    cursor: not-allowed;       /* 비활성화시 커서 모양 */
+}
+
+#todoTable {
+    width: 90%;                  /* 가로 길이: 전체 부모 요소 크기 */
+    padding: 55px 20px;           /* 내부 여백: 위아래 12px, 좌우 20px */
+    margin: 10px;                /* 외부 여백: 위아래 8px */
+    box-sizing: border-box;       /* 패딩과 테두리를 포함한 크기 계산 */
+    border: 1px solid #ccc;       /* 테두리: 두께 2px, 색상 #ccc */
+    border-radius: 8px;           /* 모서리 둥글게 처리 */
+    background-color: #f9f9f9;    /* 배경색 */
+    font-size: 14px;              /* 글자 크기 */
+    color: #333;                  /* 글자색 */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* 테두리와 그림자 효과 */
+}
+/* input placeholder 스타일 */
+#todoTable::placeholder {
+    color: #aaa;                  /* 플레이스홀더 텍스트 색상 */
+    opacity: 1;                   /* 투명도 설정 */
+}
+
+/* input 비활성화 시 스타일 */
+#todoTable:disabled {
+    background-color: #e9e9e9;    /* 비활성화 시 배경색 */
+    border-color: #d9d9d9;        /* 비활성화 시 테두리 색상 */
+    color: #777;                  /* 비활성화 시 글자색 */
+    cursor: not-allowed;          /* 비활성화 시 커서 모양 */
+}
+.box {
+    height: 700px;
+    border-radius: 15px;
+}
+
+.white-box {
+    width: 250px;
+    background-color: white;
+    align-items: center;
+    flex-direction: column;
+    display: flex;
+    
+}
+.white-box img {
+    margin: 0 auto;
+    margin-top: 60px;
+}
+.white-box .name {
+    font-size: 25px;
+    font-weight: bold;
+    color :rgb(130, 95, 68);
+}
+.login-button {
+    display: flex;
+    justify-content: center; /* 가로 방향 가운데 정렬 */
+    align-items: center; /* 세로 방향 가운데 정렬 (필요에 따라 추가) */
+    background: none; /* 배경 제거 */
+    border: none; /* 테두리 제거 */
+    font: inherit; /* 부모 요소의 폰트 상속 */
+    color: inherit; /* 부모 요소의 색상 상속 */
+    cursor: pointer; /* 클릭 가능 커서 */
+    position: absolute;
+    bottom: 30px; /* 하단으로부터의 거리 설정 */
+    
+}
+.custom-list {
+    list-style: none; /* Remove default list style */
+    padding: 0; /* Remove default padding */
+    margin: 0; /* Remove default margin */
+    margin-top: 40px;
+}
+
+.custom-list li {
+    font-size: 18px; /* Increase font size */
+    margin: 35px; /* Add some space between items */
+    color: rgb(130, 130, 130);
+}
+.custom-list li:hover {
+    color: rgb(67, 67, 67);
+    font-weight: bold;
+}
+.gray-box {
+    width: 1000px;
+    display: flex;
+    flex-direction: column; /* Stack children vertically */
+    background-color: rgb(230, 230, 230);
+}
+
+.header {
+    display: flex;
+    flex-direction: column; /* Stack children vertically */
+    width: 1000px;
+}
+
+.header-top {
+    display: flex;  
+    align-items: center;
+    width: 100%; /* Ensure it takes full width */
+}
+
+.header .notice {
+    float : right;
+}
+.gray-box h1 {
+    margin: 50px;
+}
+.datebox {
+    margin : 50px;
+    margin-top: -40px;
+    height: 35px;
+    width: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center; 
+    color :rgb(130, 130, 130);
+    gap : 10px;
+}
+
+
+.table {
+    display: flex;
+    flex-direction: column;
+    
+    width: 250px;
+    height: 500px;
+    gap : 30px;
+}
+.table-box {
+    width : 230px;
+    height: 200px;
+    border-radius: 25px;
+    background-color: rgb(244, 244, 244);
+}
+.table.url, .table.done {
+    display: flex;
+    flex-direction: column;
+    
+    width : 150px;
+    gap : 30px;
+}
+.table-box-url {
+    width : 150px;
+    height: 200px;
+    border-radius: 25px;
+    background-color: rgb(244, 244, 244);
+}
+.table-box-done {
+    width : 150px;
+    height: 200px;
+    border-radius: 25px;
+    background-color: rgb(244, 244, 244);
+}
+.date-con {
+    display: flex;
+    margin-left: -13px;
+}
+
+.TodoList {
+    width : 1000px;
+    display: flex;
+    gap : 30px;
+    justify-content: center;
+}
+
+.tabel-rabelborad {
+    display: flex;
+    justify-content: flex-end; /* 자식 요소들을 오른쪽으로 정렬 */
+    width: 900px;
+    margin-top: -50px;
+    margin-bottom: 10px;
+    gap : 135px;
+}
+.tabel-rabel {
+    float: right;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+
+
+.arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+}
+
+.arrow-button {
+    background: none;
+    border: none;
+    font-size:  0.9em;
+    cursor: pointer;
+}
+
+.notification-button {
+    position: relative;
+    border: none;
+    border-radius: 50%; /* 둥근 모서리 */
+    width: 40px; /* 버튼 크기 */
+    height: 40px; /* 버튼 크기 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 20px; /* 아이콘 크기 */
+    color: #333; /* 아이콘 색상 */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* 그림자 효과 */
+    transition: background-color 0.3s ease;
+}
+
+.notification-button:hover {
+    background-color: #e0e0e0; /* 호버 시 배경색 변경 */
+}
+
+.icon {
+    font-size: 20px; /* 아이콘 크기 */
+}
+
+.badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #ff0000; /* 배지 배경색 */
+    color: #fff; /* 배지 텍스트 색상 */
+    border-radius: 50%;
+    width: 15px; /* 배지 크기 */
+    height: 15px; /* 배지 크기 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px; /* 배지 텍스트 크기 */
+    font-weight: bold;
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="box white-box">
+            <img src="{% static 'floating2.png' %}" width="150px" height="150px">
+            <div class="name">name</div>
+            <ul class="custom-list">
+                <li>Todo Board</li>
+                <li>Time Sheet</li>
+            </ul>
+            
+                <button class="login-button">
+                    로그인/로그아웃
+                </button>
+           
+        </div>
+        <div class="box gray-box">
+            <div class="header-top">
+                <h1>ToDo Board</h1>
+                <div class="notice">
+                    <button class="notification-button">
+                    <span class="icon">&#128276;</span> <!-- 알림 아이콘 (종 모양) -->
+                </button>
+                </div>
+            </div>
+
+            <div class="date-con">
+            
+                <div class="datebox">
+                    <div class="arrow left-arrow">
+                        <button class="arrow-button">&#8592;</button> <!-- Left arrow -->
+                    </div>
+                    2024 / 08 / 02 Fri
+                    <div class="arrow right-arrow">
+                        <button class="arrow-button">&#8594;</button> <!-- Right arrow -->
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="tabel-rabelborad">
+                <div class="tabel-rabel">URL</div>
+                <div class="tabel-rabel">DONE</div>
+            </div>
+
+            <div class="TodoList">
+            <div class="table">
+                <form action="./createTodo/" method="POST"> {% csrf_token %}
+                <div class="table-box">
+                    <input id="todoTable" name="todoTable" type="text" placeholder="메모할 내용을 적어주세요">
+                    <button class="btn" type="submit">메모하기</button>
+                </div> </form>
+                
+            </div>
+            
+            <div class="table">
+                {% for todo in todos %}
+                <form action="./deleteTodo/" method="GET">
+                <div class="table-box">
+                    <input id="todoTable" name="todoTable" type="text" value="{{ todo.content }}">
+                    <input type="hidden" id="todoNum" name="todoNum" value="{{todo.id}}"></input>
+                    <!-- 연필 모양 버튼 -->
+                    <button class="btn btn-close">삭제
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M19.07 4.93a1 1 0 0 0-1.41
+                        
+                        
+                        
+                        
+                        
+                        
+                        0L12 10.59 6.34 4.93a1 1 0 0 0-1.41 1.41L10.59 12l-5.66 5.66a1 1 0 0 0 1.41 1.41L12 13.41l5.66 5.66a1 1 0 0 0 1.41-1.41L13.41 12l5.66-5.66a1 1 0 0 0 0-1.41z"/>
+                        </svg>
+                    </button>
+                </form>
+                <form action="./updatePage/{{todo.id}}" method="POST"> {% csrf_token %}
+                    <button class="btn btn-pencil">수정
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M3 21v-3.75L14.81 5.44l3.75 3.75L6.75 21H3zM20.71 7.04a1 1 0 0 0 0-1.41L18.37 3.3a1 1 0 0 0-1.41 0l-2.12 2.12 3.75 3.75 2.12-2.13z"/>
+                        </svg>
+                    </button>
+                </form>
+                </div>
+                
+                {% endfor %}
+                
+            </div>
+
+            <div class="table url">
+                <div class="table-box-url"></div>
+                <div class="table-box-url"></div>
+                <div class="table-box-url"></div>
+            </div>
+
+            <div class="table done">
+                <div class="table-box-done"></div>
+                <div class="table-box-done"></div>
+                <div class="table-box-done"></div>
+            </div>
+        </div>
+        </div>
+    </div>
+           
+      
+
+</body>
+</html>

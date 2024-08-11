@@ -1,0 +1,218 @@
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    background-color: #f0f0f0;
+    align-items: center;
+    justify-content: center;
+    color :rgb(62, 62, 62);
+}
+
+.container {
+    display: flex;
+}
+
+.box {
+    height: 700px;
+    border-radius: 15px;
+}
+
+.white-box {
+    width: 250px;
+    background-color: white;
+    align-items: center;
+    flex-direction: column;
+    display: flex;
+    
+}
+.white-box img {
+    margin: 0 auto;
+    margin-top: 60px;
+}
+.white-box .name {
+    font-size: 25px;
+    font-weight: bold;
+    color :rgb(130, 95, 68);
+}
+.login-button {
+    display: flex;
+    justify-content: center; /* 가로 방향 가운데 정렬 */
+    align-items: center; /* 세로 방향 가운데 정렬 (필요에 따라 추가) */
+    background: none; /* 배경 제거 */
+    border: none; /* 테두리 제거 */
+    font: inherit; /* 부모 요소의 폰트 상속 */
+    color: inherit; /* 부모 요소의 색상 상속 */
+    cursor: pointer; /* 클릭 가능 커서 */
+    position: absolute;
+    bottom: 30px; /* 하단으로부터의 거리 설정 */
+    
+}
+.custom-list {
+    list-style: none; /* Remove default list style */
+    padding: 0; /* Remove default padding */
+    margin: 0; /* Remove default margin */
+    margin-top: 40px;
+}
+
+.custom-list li {
+    font-size: 18px; /* Increase font size */
+    margin: 35px; /* Add some space between items */
+    color: rgb(130, 130, 130);
+}
+.custom-list li:hover {
+    color: rgb(67, 67, 67);
+    font-weight: bold;
+}
+.gray-box {
+    width: 1000px;
+    display: flex;
+    flex-direction: column; /* Stack children vertically */
+    background-color: rgb(230, 230, 230);
+}
+
+.header {
+    display: flex;
+    flex-direction: column; /* Stack children vertically */
+    width: 1000px;
+}
+
+.header-top {
+    display: flex;  
+    align-items: center;
+    width: 100%; /* Ensure it takes full width */
+}
+
+.header .notice {
+    float : right;
+}
+.gray-box h1 {
+    margin: 50px;
+}
+.datebox {
+    margin : 50px;
+    margin-top: -40px;
+    height: 35px;
+    width: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center; 
+    color :rgb(130, 130, 130);
+    gap : 10px;
+}
+
+
+.table {
+    display: flex;
+    flex-direction: column;
+    
+    width: 250px;
+    height: 500px;
+    gap : 30px;
+}
+.table-box {
+    width : 230px;
+    height: 200px;
+    border-radius: 25px;
+    background-color: rgb(244, 244, 244);
+}
+.table.url, .table.done {
+    display: flex;
+    flex-direction: column;
+    
+    width : 150px;
+    gap : 30px;
+}
+.table-box-url {
+    width : 150px;
+    height: 200px;
+    border-radius: 25px;
+    background-color: rgb(244, 244, 244);
+}
+.table-box-done {
+    width : 150px;
+    height: 200px;
+    border-radius: 25px;
+    background-color: rgb(244, 244, 244);
+}
+.date-con {
+    display: flex;
+    margin-left: -13px;
+}
+
+.TodoList {
+    width : 1000px;
+    display: flex;
+    gap : 30px;
+    justify-content: center;
+}
+
+.tabel-rabelborad {
+    display: flex;
+    justify-content: flex-end; /* 자식 요소들을 오른쪽으로 정렬 */
+    width: 900px;
+    margin-top: -50px;
+    margin-bottom: 10px;
+    gap : 135px;
+}
+.tabel-rabel {
+    float: right;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+
+
+.arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+}
+
+.arrow-button {
+    background: none;
+    border: none;
+    font-size:  0.9em;
+    cursor: pointer;
+}
+
+.notification-button {
+    position: relative;
+    border: none;
+    border-radius: 50%; /* 둥근 모서리 */
+    width: 40px; /* 버튼 크기 */
+    height: 40px; /* 버튼 크기 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 20px; /* 아이콘 크기 */
+    color: #333; /* 아이콘 색상 */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* 그림자 효과 */
+    transition: background-color 0.3s ease;
+}
+
+.notification-button:hover {
+    background-color: #e0e0e0; /* 호버 시 배경색 변경 */
+}
+
+.icon {
+    font-size: 20px; /* 아이콘 크기 */
+}
+
+.badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #ff0000; /* 배지 배경색 */
+    color: #fff; /* 배지 텍스트 색상 */
+    border-radius: 50%;
+    width: 15px; /* 배지 크기 */
+    height: 15px; /* 배지 크기 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px; /* 배지 텍스트 크기 */
+    font-weight: bold;
+}
