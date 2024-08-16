@@ -1,10 +1,12 @@
-from django.shortcuts import render,HttpResponse,HttpResponseRedirect,reverse
+from django.shortcuts import render,HttpResponse,HttpResponseRedirect,reverse, get_object_or_404
 from .models import *
 
 def index(request) :
     todos = Todo.objects.all()
     texts = Text.objects.all()
-    content = {'todos':todos, 'texts':texts}
+    urls = CreateUrl.objects.all()  # CreateUrl 모델의 데이터를 가져옴
+    todo_text_pairs = zip(todos, texts)
+    content = {'todo_text_pairs': todo_text_pairs, 'urls': urls}
     return render(request,'Table/main.html',content)
 
 def Create_todo(request) :
@@ -22,9 +24,44 @@ def Todo_delete(request) :
     print("완료한 todo의 id", done_todo_id)
     todo = Todo.objects.get(id = done_todo_id)
     todo.delete()
+    
     return HttpResponseRedirect(reverse('index'))
 
 def Todo_update(request, todo_id) :
-    todos = Todo.objects.get(id=todo_id)
-    content = {'todos':todos}
-    return render(request, 'updateTodo.html', content)
+    todo = Todo.objects.get(id=todo_id)
+    todos = Todo.objects.all()
+    texts = Text.objects.all()
+    urls = CreateUrl.objects.all()  # CreateUrl 모델의 데이터를 가져옴
+    todo_text_pairs = zip(todos, texts)
+    content = {'todo_text_pairs': todo_text_pairs, 'urls': urls,'todo':todo}
+    return render(request, 'Table/updatePage.html', content)
+
+def Create_URL(request) :
+    content_urls = request.POST['todoURL']
+    new_url = CreateUrl(url_content = content_urls)
+    new_url.save()
+
+    return HttpResponseRedirect(reverse('index'))
+
+
+def Delete_url(request) :
+    done_url_id = request.GET['urlNum']
+    print("완료한 todo의 id", done_url_id)
+    done_url = CreateUrl.objects.get(id = done_url_id)
+    done_url.delete()
+
+    return HttpResponseRedirect(reverse('index'))
+
+def timesheet(request):
+    todos = Todo.objects.all()
+    texts = Text.objects.all()
+    urls = CreateUrl.objects.all()  # CreateUrl 모델의 데이터를 가져옴
+    todo_text_pairs = zip(todos, texts)
+    content = {'todo_text_pairs': todo_text_pairs, 'urls': urls}
+    return render(request, 'Table/timesheet.html', content)
+
+def main(request) :
+    return HttpResponseRedirect(reverse('index'))
+
+def loginsheet(request) :
+    return render(request,'Table/login.html')

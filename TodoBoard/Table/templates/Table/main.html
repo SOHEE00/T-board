@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>TodoList</title>
     <style>
         body {
                 margin: 0;
@@ -15,8 +15,13 @@
                 align-items: center;
                 justify-content: center;
                 color :rgb(62, 62, 62);
+                font-family: 'Nanum Gothic', sans-serif;;
             }
-
+a {
+    text-decoration: none;
+    color : rgb(130, 130, 130);
+    font-size: 18px; /* Increase font size */
+}
 .container {
     display: flex;
 }
@@ -40,6 +45,26 @@
     font-size: 12px;
 }
 
+.btn-close{
+    float: left;
+    white-space: nowrap;
+    height: 5px;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-danger{
+    margin-left: 50px;
+    width: 35px;
+    height: 5px; /* 버튼 높이 설정 (필요에 따라 조정) */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none; /* 버튼 테두리 제거 (필요에 따라) */
+    color: white; /* 버튼 텍스트 색상 (예시) */
+    white-space: nowrap;
+}
+
 .btn:hover {
     background-color: #cccccc; /* 마우스 오버시 배경색 */
 }
@@ -57,7 +82,7 @@
     cursor: not-allowed;       /* 비활성화시 커서 모양 */
 }
 
-#todoTable {
+#todoTable,#todoURL {
     width: 90%;                  /* 가로 길이: 전체 부모 요소 크기 */
     padding: 10px 20px;           /* 내부 여백: 위아래 12px, 좌우 20px */
     margin: 10px;                /* 외부 여백: 위아래 8px */
@@ -83,7 +108,7 @@
     cursor: not-allowed;          /* 비활성화 시 커서 모양 */
 }
 
-#todoText {
+#todoText,#todoURL {
     width: 90%;                  /* 가로 길이: 전체 부모 요소 크기 */
     padding: 40px 20px;           /* 내부 여백: 위아래 12px, 좌우 20px */
     margin: 10px;                /* 외부 여백: 위아래 8px */
@@ -134,7 +159,6 @@
 .login-button {
     display: flex;
     justify-content: center; /* 가로 방향 가운데 정렬 */
-    align-items: center; /* 세로 방향 가운데 정렬 (필요에 따라 추가) */
     background: none; /* 배경 제거 */
     border: none; /* 테두리 제거 */
     font: inherit; /* 부모 요소의 폰트 상속 */
@@ -142,6 +166,7 @@
     cursor: pointer; /* 클릭 가능 커서 */
     position: absolute;
     bottom: 30px; /* 하단으로부터의 거리 설정 */
+    margin-left: -70px;
     
 }
 .custom-list {
@@ -212,6 +237,10 @@
     border-radius: 25px;
     background-color: rgb(244, 244, 244);
 }
+.url-box {
+    width: 150px;
+    height: 180px;
+}
 .table.url, .table.done {
     display: flex;
     flex-direction: column;
@@ -220,8 +249,8 @@
     gap : 30px;
 }
 .table-box-url {
-    width : 150px;
-    height: 200px;
+    width : 160px;
+    height: 160px;
     border-radius: 25px;
     background-color: rgb(244, 244, 244);
 }
@@ -322,13 +351,13 @@
             <div class="name">name</div>
             <ul class="custom-list">
                 <li>Todo Board</li>
-                <li>Time Sheet</li>
+                <li><a href="{% url 'timesheet' %}">Time Sheet</a></li>
             </ul>
-            
+            <a href="{% url 'loginsheet' %}">
                 <button class="login-button">
                     로그인/로그아웃
                 </button>
-           
+            </a>
         </div>
         <div class="box gray-box">
             <div class="header-top">
@@ -363,7 +392,7 @@
             <div class="table">
                 <form action="./createTodo/" method="POST"> {% csrf_token %}
                 <div class="table-box">
-                    <input id="todoTable" name="todoTable" type="text" placeholder="메모할 내용을 적어주세요">
+                    <input id="todoTable" name="todoTable" type="text" placeholder="제목을 적어주세요">
                     <input id="todoText" name="todoText" type="text" placeholder="메모할 내용을 적어주세요">
                     <button class="btn" type="submit">메모하기</button>
                 </div> </form>
@@ -371,12 +400,12 @@
             </div>
             
             <div class="table">
-                {% for todo in todos %}
+                {% for todo, text in todo_text_pairs %}
                 
                 <form action="./deleteTodo/" method="GET">
                 <div class="table-box">
                     <input id="todoTable" name="todoTable" type="text" value="{{ todo.content }}" disabled>
-                    <input id="todoText" name="todoText" type="text" value="{{ text.content }}" disabled>
+                    <input id="todoText" name="todoText" type="text" value="{{ todo.text_content }}" disabled>
                     <input type="hidden" id="todoNum" name="todoNum" value="{{todo.id}}"></input>
                     <!-- 연필 모양 버튼 -->
                     <button class="btn btn-close">삭제
@@ -386,7 +415,7 @@
                     </button>
                 </form>
                 
-                    <a href ="./updatePage/{{todo.id}}" class="btn btn-danger" role="button">수정하기</a>
+                    <a href ="./updatePage/{{ todo.id }}" class="btn btn-danger" role="button">수정하기</a>
                 
                 </div>
                 
@@ -395,9 +424,27 @@
             </div>
 
             <div class="table url">
-                <div class="table-box-url"></div>
-                <div class="table-box-url"></div>
-                <div class="table-box-url"></div>
+                <form action="./createURL/" method="POST"> {% csrf_token %}
+                <div class="table-box-url">
+                    <div class="url-box">
+                        <input id="todoURL" name="todoURL" type="text" placeholder="URL 입력">
+                        <button class="btn" type="submit">메모하기</button>
+                    </div>
+                </div>
+                </form>
+                <form action="./deleteurl/" method="GET">
+                {% for url in urls %}
+                <div class="table-box-url">
+                    <input id="todoURL" name="todoURL" type="text" value="{{ url.url_content }}" disabled>
+                    <input type="hidden" id="urlNum" name="urlNum" value="{{url.id}}"></input>
+                    <button class="btn btn-close">삭제
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M19.07 4.93a1 1 0 0 0-1.41 0L12 10.59 6.34 4.93a1 1 0 0 0-1.41 1.41L10.59 12l-5.66 5.66a1 1 0 0 0 1.41 1.41L12 13.41l5.66 5.66a1 1 0 0 0 1.41-1.41L13.41 12l5.66-5.66a1 1 0 0 0 0-1.41z"/>
+                        </svg>
+                    </button>
+                </div>
+                {% endfor %}
+                </form>
             </div>
 
             <div class="table done">

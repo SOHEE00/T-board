@@ -21,5 +21,10 @@ urlpatterns = [
     path('',views.index, name='index'),
     path('createTodo/',views.Create_todo, name='create_Todo'),
     path('deleteTodo/',views.Todo_delete, name='Todo_Delete'),
-    path('updatePage/<str:todo_id>',views.Todo_update, name='Todo_update'),
+    path('updatePage/<int:todo_id>/',views.Todo_update, name='Todo_update'),
+    path('createURL/',views.Create_URL, name='create_url'),
+    path('deleteurl/',views.Delete_url, name='delete_url'),
+    path('timesheet/', views.timesheet, name='timesheet'),
+    path('main/', views.main, name='main'),
+    path('loginsheet/',views.loginsheet, name='loginsheet'),
 ]
