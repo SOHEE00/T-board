@@ -1,5 +1,5 @@
 :root{
-    --background-theme:#e6e9f0;
+    --background-theme:rgb(230, 230, 230);
     --text-color:#000;
 }
 
@@ -9,7 +9,7 @@
     font-size: 10px;
     color: var(--text-color);
     box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Nanum Gothic', sans-serif;
 }
 
 body{
@@ -88,9 +88,7 @@ p{
     font-weight: 600 !important;
 
 }
-.form-group {
-   
-}
+
 .already_member_box p,
 .already_member_box span{
     cursor: pointer;
