@@ -16,6 +16,7 @@ Including another URLconf
 """
 from . import views
 from django.urls import path, include
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('',views.index, name='index'),
@@ -31,5 +32,6 @@ urlpatterns = [
     path('deleteDone/',views.Delete_done, name='delete_done'),
     path('timesheet/', views.timesheet, name='timesheet'),
     path('main/', views.main, name='main'),
+    path('login/', views.custom_login_view, name='login'),
     path('loginsheet/',views.loginsheet, name='loginsheet'),
 ]

@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TodoList</title>
     <link rel="stylesheet" href="{% static 'Table/timesheet.css' %}">
-    <script src="{% static 'js/timesheet.js' %}"></script>
+    <script src="{% static 'js/timesheet.js' %}" defer></script>
     <style>
         body {
                 margin: 0;
@@ -47,7 +47,41 @@ a {
     font-size: 25px;
     font-weight: bold;
 }
+.timebox {
+    transition: max-height 0.7s ease; /* 부드러운 확장 효과 */
+}
+.timebox.open {
+    height: 50px;
+    max-height: 400px; /* 확장 후의 최대 높이 (필요에 따라 조정 가능) */
+}
+.hidden-content {
+    display: none; /* 초기 상태에서는 숨김 */
+    opacity: 0;
+    transition: opacity 0.5s ease; /* 부드러운 텍스트 표시 효과 */
+}
+.label {
+    background-color: #fff4a3;
+}
+.label2 {
+    color :#f0f0f0;
+}
+.timebox.open .label {
+    margin-top: 40px;
+}
+.timebox.open .hidden-content {
+    display: inline; /* 열렸을 때 표시 */
+    opacity: 1;
+    margin-top: 10px;
+    font-weight :105;
+    margin: 10px;
+}
+.list-label {
+    display: flex;
+    flex-direction: column; /* 요소들을 세로로 배치 */
+    justify-content: flex-start; /* 요소들을 컨테이너의 시작 부분에 정렬 */
+    align-items: flex-start; /* 요소들을 컨테이너의 왼쪽(또는 오른쪽)으로 정렬 */
 
+}
 .custom-list {
     list-style: none; /* Remove default list style */
     padding: 0; /* Remove default padding */
@@ -107,19 +141,17 @@ a {
     gap : 10px;
     font-weight: bold;
 }
-
 .login-button {
     display: flex;
     justify-content: center; /* 가로 방향 가운데 정렬 */
-    background: none; /* 배경 제거 */
-    border: none; /* 테두리 제거 */
-    font: inherit; /* 부모 요소의 폰트 상속 */
-    color: inherit; /* 부모 요소의 색상 상속 */
+    color :rgb(130, 130, 130);
+    font-size: 18px;
     cursor: pointer; /* 클릭 가능 커서 */
     position: absolute;
-    bottom: 250px; /* 하단으로부터의 거리 설정 */
+    bottom: 30px; /* 하단으로부터의 거리 설정 */
     margin-left: -70px;
 }
+
 .arrow-button {
     display: inline-flex;
     align-items: center;
@@ -164,6 +196,8 @@ a {
     cursor: pointer;
 }
 .timebox {
+    transition: all 0.3s ease; /* 크기 조정 애니메이션 */
+    overflow: hidden;
     background-color: #ffffff; 
     padding: 30px; 
     margin-bottom: 10px; 
@@ -171,15 +205,6 @@ a {
     width: 900px;
     justify-content: center;
     box-shadow: 0px 3px 2px rgba(183, 183, 183, 0.2);
-}
-
-.container2 {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 10px; 
-    height: 540px;
 }
 .ck{
     display: flex;     
@@ -201,7 +226,7 @@ a {
     border-radius: 10px;
 }
 .calendar{
-    background-color: orangered;
+    background-color: rgb(255, 174, 145);
     width: 900px;
     height: 200px;
 }
@@ -209,7 +234,7 @@ a {
     display: flex;
     
 }
-.label {
+.label,.label2 {
     margin-left: 10px; 
     white-space: nowrap;
 }
@@ -238,11 +263,15 @@ input[type="checkbox"] {
             <ul class="custom-list">
                 <li><a href="{% url 'main' %}">Todo Board</a></li></li>
                 <li>Time Sheet</li>
+                <li><a href="{% url 'timesheet' %}">Star page</a></li>
+                <li><a href="{% url 'timesheet' %}">Shared page</a></li>
             </ul>
             <div class="foot">
+                <a href="{% url 'loginsheet' %}">
                 <button class="login-button">
                     Login / Logout
                 </button>
+                </a>
             </div>
         </div>
         <div class="box gray-box">
@@ -262,32 +291,73 @@ input[type="checkbox"] {
                     </div>
                 </div>  
             </div>
+
             <div class="container2">
-                {% for todo, text in todo_text_pairs %}
-                <div class="timebox" id="timebox">
+                {% for todo in todos %}
+                <div class="timebox">
                     
                     <div class="ck">
                         <input type="checkbox">
                         
+                        <div class="list-label">
                         <span class="label">{{ todo.content }}</span> 
                         
-                        <span class="label">
-                     
-                        </span> 
+                        <span class="hidden-content" style="display: none;">
+                            {{ todo.text_content }}
+                        </span>
+
+                        </div>
                         <div class="jump">
                             <form>
                                 <p><input type="time" id="time" value="13:10:20" min="13:00:00" max="15:00:00"></p>
                             </form> 
                         </div>
-                        <div class="timedelete"><input id="check-btn" type="checkbox"/>
+                        <label class="timedelete"><input id="check-btn" type="checkbox"/>
+                            
                             <label for="check-btn"><!-- 아래 방향 화살표 버튼 -->
-                                <button class="arrow-button">&#9660;</button></label>
+                                <button class="arrow-button" type="button" onclick="toggleMemoBox(this)">&#9660;</button></label>
+                            </label>   
                         </div>
+                        {% endfor %}
+                    </div>
+                
+                </div>
+             
+                
+
+
+                <div class="container2">
+                    {% for dones in done %}
+                    <div class="timebox2">
+                        
+                        <div class="ck">
+                            <input type="checkbox">
+                            
+                            <div class="list-label">
+                            <span class="label2">{{ dones.content }}</span> 
+                            
+                            <span class="hidden-content">
+                                {{ dones.text_content }}
+                            </span>
+    
+                            </div>
+                            <div class="jump">
+                                <form>
+                                    <p><input type="time" id="time" value="13:10:20" min="13:00:00" max="15:00:00"></p>
+                                </form> 
+                            </div>
+                            <div class="timedelete"><input id="check-btn" type="checkbox"/>
+                                
+                                <label for="check-btn"><!-- 아래 방향 화살표 버튼 -->
+                                    <button class="arrow-button" type="button" onclick="toggleDoneBox(this)">&#9660;</button></label>
+                                </label>    
+                            </div>
+                        </div>
+                        </div>
+                    {% endfor %}
                     </div>
                     
-                </div>
-                {% endfor %}
-               
+                    
               
               
                 <div class="calendarcon">

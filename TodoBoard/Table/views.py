@@ -1,4 +1,5 @@
 from django.shortcuts import render,HttpResponse,HttpResponseRedirect,reverse, get_object_or_404
+from django.contrib.auth import authenticate, login
 from .models import *
 
 def index(request) :
@@ -110,10 +111,9 @@ def Update_url(request) :
 
 def timesheet(request):
     todos = Todo.objects.all()
-    texts = Text.objects.all()
     urls = CreateUrl.objects.all()  # CreateUrl 모델의 데이터를 가져옴
-    todo_text_pairs = zip(todos, texts)
-    content = {'todo_text_pairs': todo_text_pairs, 'urls': urls}
+    done = Done_todo.objects.all()  # Done_todo 모델의 데이터를 가져옴
+    content = {'todos': todos, 'urls': urls, 'done':done}
     return render(request, 'Table/timesheet.html', content)
 
 def main(request) :
@@ -121,3 +121,18 @@ def main(request) :
 
 def loginsheet(request) :
     return render(request,'Table/login.html')
+
+
+def custom_login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return HttpResponseRedirect(reverse('index'))
+        else:
+            # Invalid login credentials
+            return render(request, 'Table/login.html', {'error': 'Invalid credentials'})
+    else:
+        return render(request, 'Table/login.html')
