@@ -5,8 +5,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="{% static 'Table/main.css' %}">
     <script src="{% static 'js/main.js' %}" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <title>TodoList</title>
     <style>
         .btn-memo {
@@ -72,7 +74,62 @@
     border: 1px solid #fff5b2;
     color : #ef8234; 
     font-weight: bold;
+    transform: translateY(-33px);
 }
+.search-form {
+    display: flex; /* flexbox 레이아웃 적용 */
+    align-items: center; /* 수직 중앙 정렬 */
+    margin-right: -80px;
+}
+
+.search-box{
+    width: 850px; /* 필요에 따라 너비를 조정 */
+    display: flex;
+    justify-content: flex-end;
+}
+
+.search-txt {
+    padding: 0 0 0 20px;
+    width: 350px;
+    height: 45px;
+    font-size: 15px;
+    line-height: 40px;
+    border-radius: 50px; /* 모서리를 둥글게 설정 */
+    border: 1px solid #ccc;
+    margin-right: 10px; /* 버튼과의 간격 */
+}
+
+.search-btn {
+    background-color: transparent;
+    border: none; /* 버튼 테두리 제거 */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.import-box{
+    width: 85px;
+    height: 30px;
+    margin: 100px 100px 0 0;
+    background-color: whitesmoke;
+    border: 1px solid #ccc;
+    border-radius: 15px; /* 테두리를 둥글게 설정 */
+    cursor: pointer;
+    display: flex; /* Flexbox 사용 */
+    align-items: center; /* 세로 중앙 정렬 */
+    justify-content: center;
+}
+
+
+.btn-star{
+    width: auto; /* width를 auto로 수정 */
+    margin-left: 132px;
+    background-color: transparent;
+    border: none;
+    font-size: 20px; /* 글자 크기 조절 */
+    transform: translateY(-65px);
+}
+
 .buttondiv {
     margin-top : -45px;
 }
@@ -143,6 +200,56 @@
         .table-box2 {
             cursor: pointer;
         }
+        .div-group {
+    display: flex;
+    justify-content: space-between;  /* 두 요소 사이에 여백을 균등하게 분배 */
+    align-items: flex-start;  /* 상단 정렬 */
+    margin-top: 20px;
+}
+
+/* 입력 필드의 기본 디자인 제거 */
+input[type="text"], input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 2px solid #ccc;  /* 기본 테두리 스타일 */
+    border-radius: 4px;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+}
+
+/* .form-group 내부의 레이아웃 조정 */
+.form-group {
+    flex: 1;  /* 각 요소가 동일한 비율로 공간을 차지하게 함 */
+    margin-right: 10px; /* 요소 사이에 약간의 여백 추가 */
+}
+
+/* 왼쪽과 오른쪽 사이에 여백 추가 */
+.left-side {
+    margin-right: 20px; /* 왼쪽 요소와 오른쪽 요소 사이의 여백 */
+}
+input[type="file"] {
+    padding: 6px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+}
+#imagePreview {
+    max-width: 100%;  /* 최대 너비를 부모 요소에 맞게 조정 */
+    max-height: 150px; /* 최대 높이 설정 */
+    display: block;  /* 기본적으로 이미지를 보이도록 설정 */
+    margin-top: 10px; /* 이미지와 다른 요소 사이에 여백 추가 */
+    border: 2px solid #ccc; /* 기본 테두리 추가 */
+    border-radius: 4px; /* 둥근 모서리 */
+    object-fit: cover; /* 이미지 비율 유지 */
+}
+#editTodoText {
+    height: 200px;
+}
+#editTodoTable {
+    font-size: 18px;
+    font-weight: bold;
+}
     </style>
 </head>
 <body>
@@ -151,10 +258,10 @@
             <img src="{% static 'chikawa.png' %}" width="150px" height="130px">
             <div class="name">Lee</div>
             <ul class="custom-list">
-                <li>Todo Board</li>
+                <li><a href="{% url 'main' %}">Todo Board</a></li></li>
                 <li><a href="{% url 'timesheet' %}">Time Sheet</a></li>
-                <li><a href="{% url 'timesheet' %}">Star page</a></li>
-                <li><a href="{% url 'timesheet' %}">Shared page</a></li>
+                <li><a href="{% url 'starpage' %}">Star page</a></li>
+                <li><a href="{% url 'sharedPage' %}">Shared page</a></li>
             </ul>
             <a href="{% url 'loginsheet' %}">
                 <button class="login-button">
@@ -164,12 +271,31 @@
         </div>
         <div class="box gray-box">
             <div class="header-top">
-                <h1>ToDo Board</h1>
+                <h1>Daylight</h1>
+                
                 <div class="notice">
                     <button class="notification-button">
                     <span class="icon">&#128276;</span> <!-- 알림 아이콘 (종 모양) -->
                 </button>
                 </div>
+
+                <div class="search-box">
+                    <form action="." method="post" class="search-form">
+                        <input class="search-txt" type="text" placeholder="검색어를 입력해 주세요">
+                        <button class="search-btn" type="submit">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </form>
+                </div>
+                <div class="import">
+                    <button class="import-box">
+                        import
+                        <img src="{% static 'import.png' %}" alt="import" style="width: 16px; height: 16px; margin-right: 0px;">
+                    </button>
+                </div>
+
+
+
             </div>
 
             <div class="date-con">
@@ -187,7 +313,7 @@
             </div>
 
             <div class="tabel-rabelborad">
-                <div class="tabel-rabel">URL</div>
+                
                 <div class="tabel-rabel">DONE</div>
             </div>
 
@@ -208,8 +334,8 @@
                 <form action="./deleteTodo/" method="GET">
                 <div class="table-box">
                     <div class="table-box2">
-                    <input id="todoTable" name="todoTable" type="text" value="{{ todo.content }}" disabled>
-                    <input id="todoText" name="todoText" type="text" value="{{ todo.text_content }}" disabled>
+                    <input id="todoTable" name="todoTable" type="text" value="{{ todo.content }}" >
+                    <input id="todoText" name="todoText" type="text" value="{{ todo.text_content }}" >
                     <input type="hidden" id="todoNum" name="todoNum" value="{{todo.id}}"></input>
                     </div>
                     <!-- 연필 모양 버튼 -->
@@ -221,16 +347,22 @@
                     </button>
                 </form>
                 
+                <a href ="./updatePage/{{ todo.id }}" class="btn btn-danger"
+                role="button">Change</a>
                 <form action="./markAsDone/" method="POST">
                     {% csrf_token %}
                     <input type="hidden" name="todo_id" value="{{ todo.id }}">
+                    
                     <button type="submit" class="btn btn-success">✔</button>
+                    
                 </form>
-
-                    <a href ="./updatePage/{{ todo.id }}" class="btn btn-danger"
-                    role="button">Change</a>
-                
+                <form class="star-form" action="./markAsStar/" method="POST" data-todo-id="{{ todo.id }}">
+                    {% csrf_token %}
+                    <input type="hidden" name="todo_id" value="{{ todo.id }}">
+                    <button type="submit" class="btn-star">☆</button>
+                </form>    
                 </div>
+               
                 </div>
                 {% endfor %}
                 
@@ -243,21 +375,27 @@
                        
                         <span class="close">&times;</span>
                        
-                        <form id="editForm" action="./updateTodo/" method="POST">
+                        <form id="editForm" action="./updateModal/" method="POST">
                             {% csrf_token %}
                             <input type="hidden" id="editTodoId" name="todo_id"  value="{{ todo.id }}">
                             
                             <div class="modal-textarea">
                                 <div class="form-group">
-                                    <label for="editTodoTable">제목 : </label>
+                                    <label for="editTodoTable"></label>
                                     <input id="editTodoTable" name="todoTable" type="text" value="{{ todo.content }}">
                                 </div>
                                 
-                                <div class="form-group">
-                                    <label for="editTodoText"></label>
-                                    <input id="editTodoText" name="todoText" type="text" value="{{ todo.text_content }}">
+                                <div class="div-group">
+                                    <div class="form-group left-side">
+                                        <label for="todoImage"></label>
+                                        <input id="todoImage" name="todoImage" type="file" accept="image/*">
+                                        <img id="imagePreview" src="" alt="Image Preview" style="display: none;"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="editTodoText"></label>
+                                        <input id="editTodoText" name="todoText" type="text" value="{{ todo.text_content }}">
+                                    </div>
                                 </div>
-
                                 <button type="submit" class="btn-memo">Save</button>
                         </form>
                         </div>
@@ -266,30 +404,7 @@
                 </div>
 
 
-            <div class="table url">
-                <form action="./createURL/" method="POST"> {% csrf_token %}
-                <div class="table-box-url">
-                    <div class="url-box">
-                        <input id="todoURL" name="todoURL" type="text" placeholder="URL 입력">
-                        <button class="btn btn-memo" type="submit">Memo</button>
-                    </div>
-                </div>
-                </form>
-                <form action="./deleteurl/" method="GET">
-                {% for url in urls %}
-                <div class="table-box-url">
-                    <input id="todoURL" name="todoURL" type="text" value="{{ url.url_content }}" disabled>
-                    <input type="hidden" id="urlNum" name="urlNum" value="{{url.id}}"></input>
-                    <button class="btn btn-close">Del
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <path d="M19.07 4.93a1 1 0 0 0-1.41 0L12 10.59 6.34 4.93a1 1 0 0 0-1.41 1.41L10.59 12l-5.66 5.66a1 1 0 0 0 1.41 1.41L12 13.41l5.66 5.66a1 1 0 0 0 1.41-1.41L13.41 12l5.66-5.66a1 1 0 0 0 0-1.41z"/>
-                        </svg>
-                    </button>
-                    <a href ="./updateUrlPage/{{ url.id }}" class="btn btn-danger2" role="button">Change</a>
-                </div>
-                {% endfor %}
-                </form>
-            </div>
+            
 
             <div class="table done">
                 <form action="./deleteDone/" method="GET">

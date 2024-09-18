@@ -263,8 +263,8 @@ input[type="checkbox"] {
             <ul class="custom-list">
                 <li><a href="{% url 'main' %}">Todo Board</a></li></li>
                 <li>Time Sheet</li>
-                <li><a href="{% url 'timesheet' %}">Star page</a></li>
-                <li><a href="{% url 'timesheet' %}">Shared page</a></li>
+                <li><a href="{% url 'starpage' %}">Star page</a></li>
+                <li><a href="{% url 'sharedPage' %}">Shared page</a></li>
             </ul>
             <div class="foot">
                 <a href="{% url 'loginsheet' %}">
@@ -352,9 +352,11 @@ input[type="checkbox"] {
                                     <button class="arrow-button" type="button" onclick="toggleDoneBox(this)">&#9660;</button></label>
                                 </label>    
                             </div>
+                            
                         </div>
+                        
                         </div>
-                    {% endfor %}
+                        {% endfor %}
                     </div>
                     
                     
