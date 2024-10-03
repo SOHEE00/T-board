@@ -89,16 +89,16 @@
     transform: translateY(-33px);
 }
 .btn-star{
+    position: relative; /* 또는 absolute */
+    top: 60px;
     width: auto; /* width를 auto로 수정 */
     margin-left: 180px;
-    
     background-color: transparent;
     font-size: 20px; /* 글자 크기 조절 */
     color: rgb(255, 165, 38);   /* Fill the star with yellow color */
     cursor: pointer; /* Change cursor to pointer on hover */
     border: none;
 }
-
 .buttondiv {
     margin-top : -45px;
 }
@@ -222,9 +222,10 @@
                     <form action="./deleteTodo/" method="GET">
                         <div class="table-box">
                             <div class="table-box2">
+                            <input type="hidden" id="todoNum" name="todoNum" value="{{todo.id}}"></input>
                             <input id="todoTable" name="todoTable" type="text" value="{{ todo.content }}" disabled>
                             <input id="todoText" name="todoText" type="text" value="{{ todo.text_content }}" disabled>
-                            <input type="hidden" id="todoNum" name="todoNum" value="{{todo.id}}"></input>
+                            
                             </div>
                             <!-- 연필 모양 버튼 -->
                             <div class="buttondiv">
@@ -245,33 +246,50 @@
            
             <!-- Todo 목록 -->
             
-            <!-- 모달 창 -->
-                <div id="myModal" class="modal">
-                    <div class="modal-content">
-                       
-                        <span class="close">&times;</span>
-                       
-                        <form id="editForm" action="./updateTodo/" method="POST">
-                            {% csrf_token %}
-                            <input type="hidden" id="editTodoId" name="todo_id"  value="{{ todo.id }}">
+             <!-- 모달 창 -->
+             <div id="myModal" class="modal">
+                <div class="modal-content">
+                   
+                    <span class="close">&times;</span>
+                   
+                    <form id="editForm" action="./updateModal/" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="hidden" id="editTodoId" name="todo_id"  value="{{ todo.id }}">
+                        
+                        <div class="modal-textarea">
+                            <div class="form-group">
+                                <label for="editTodoTable"></label>
+                                <input id="editTodoTable" name="todoTable" type="text" value="{{ todo.content }}">
+                            </div>
                             
-                            <div class="modal-textarea">
-                                <div class="form-group">
-                                    <label for="editTodoTable">제목 : </label>
-                                    <input id="editTodoTable" name="todoTable" type="text" value="{{ todo.content }}">
+                            <div class="div-group">
+                                <div class="form-group left-side">
+                                    
+                                    <input id="todoImage" name="todoImage" type="file" accept="image/*">
+                                    <img src="{{ todo.image }}" alt="Todo Image">
+                                    <img id="imagePreview" src="" alt="Image Preview" style="display: none;"/>
+                                   
                                 </div>
-                                
                                 <div class="form-group">
-                                    <label for="editTodoText"></label>
+                                    
                                     <input id="editTodoText" name="todoText" type="text" value="{{ todo.text_content }}">
                                 </div>
-
-                                <button type="submit" class="btn-memo">Save</button>
-                        </form>
-                        </div>
-                        
+                                <div class="export">
+                                    <button class="export-box">
+                                        export
+                                        <img src="{% static 'export.png' %}" alt="export" style="width: 16px; height: 16px; margin-right: 0px;">
+                                    </button>
+                                </div>
+                            </div>
+                           
+                            <button type="submit" class="btn-memo">Save</button>
+                    </form>
                     </div>
+                    
                 </div>
+            </div>
+
+
 
 
             

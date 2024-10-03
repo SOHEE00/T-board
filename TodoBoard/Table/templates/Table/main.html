@@ -74,7 +74,9 @@
     border: 1px solid #fff5b2;
     color : #ef8234; 
     font-weight: bold;
-    transform: translateY(-33px);
+    width : 30px;
+    height: 30px;
+    border-radius: 20px;
 }
 .search-form {
     display: flex; /* flexbox 레이아웃 적용 */
@@ -90,11 +92,11 @@
 
 .search-txt {
     padding: 0 0 0 20px;
-    width: 350px;
+    width: 400px !important;
     height: 45px;
     font-size: 15px;
     line-height: 40px;
-    border-radius: 50px; /* 모서리를 둥글게 설정 */
+    border-radius: 20px !important; /* 모서리를 둥글게 설정 */
     border: 1px solid #ccc;
     margin-right: 10px; /* 버튼과의 간격 */
 }
@@ -120,19 +122,92 @@
     justify-content: center;
 }
 
+.export-box{
+    width: 85px;
+    height: 30px;
+    margin: -24px 30px 0 0;
+    background-color: whitesmoke;
+    border: 1px solid #ccc;
+    border-radius: 15px; /* 테두리를 둥글게 설정 */
+    cursor: pointer;
+    display: flex; /* Flexbox 사용 */
+    align-items: center; /* 세로 중앙 정렬 */
+    justify-content: center;
+}
 
+.table-box{
+width : 230px;
+height: 220px;
+margin-left: 40px;
+border-radius: 25px;
+background-color: rgb(255, 255, 255);
+box-shadow: 0px 3px 2px rgba(183, 183, 183, 0.2);
+}
+.table.done {
+display: flex;
+flex-direction: column;
+width : 150px;
+gap : 30px;
+transform: translateX(85px);
+margin-right: 90px;
+}
+
+.tabel-rabel {
+    float: right;
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 5px;
+    margin-right: 45px;
+}
 .btn-star{
     width: auto; /* width를 auto로 수정 */
-    margin-left: 132px;
     background-color: transparent;
     border: none;
     font-size: 20px; /* 글자 크기 조절 */
     transform: translateY(-65px);
 }
-
+.btn-memo2 {
+            background-color: #ffd08a;
+            border: 1px solid #ffd08a; 
+            color : #fa7617; 
+            font-weight: bold; 
+            position: relative; /* 또는 absolute */
+            top: -20px;
+            padding: 5px 15px;
+            border-radius: 7px;
+            margin-left: 5px;
+        }
 .buttondiv {
     margin-top : -45px;
 }
+.btn-close-done {
+            background-color: whitesmoke;
+            border: 1px solid whitesmoke;
+            color : #ffffff; 
+            font-weight: bold;
+            margin : 15px;
+            margin-top : -10px;
+            float : right;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width : 20px;
+            height: 25px;
+        }
+        .btn-delete {
+            background-color: #414141;
+            border: 1px solid #414141;
+            color : #ffffff; 
+            font-weight: bold;
+            margin : 15px -10px 15px 15px;
+            margin-top : -10px;
+            float : right;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width : 20px;
+            height: 25px;
+        }
         #doneText {
             width: 90%;                  /* 가로 길이: 전체 부모 요소 크기 */
             padding: 20px 20px;           /* 내부 여백: 위아래 12px, 좌우 20px */
@@ -245,6 +320,7 @@ input[type="file"] {
 }
 #editTodoText {
     height: 200px;
+    margin: 10px 0 0 100px;
 }
 #editTodoTable {
     font-size: 18px;
@@ -293,7 +369,6 @@ input[type="file"] {
                         <img src="{% static 'import.png' %}" alt="import" style="width: 16px; height: 16px; margin-right: 0px;">
                     </button>
                 </div>
-
 
 
             </div>
@@ -353,7 +428,7 @@ input[type="file"] {
                     {% csrf_token %}
                     <input type="hidden" name="todo_id" value="{{ todo.id }}">
                     
-                    <button type="submit" class="btn btn-success">✔</button>
+                    <button type="submit" class="btn-success">✔</button>
                     
                 </form>
                 <form class="star-form" action="./markAsStar/" method="POST" data-todo-id="{{ todo.id }}">
@@ -375,7 +450,7 @@ input[type="file"] {
                        
                         <span class="close">&times;</span>
                        
-                        <form id="editForm" action="./updateModal/" method="POST">
+                        <form id="editForm" action="./updateModal/" method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
                             <input type="hidden" id="editTodoId" name="todo_id"  value="{{ todo.id }}">
                             
@@ -387,16 +462,25 @@ input[type="file"] {
                                 
                                 <div class="div-group">
                                     <div class="form-group left-side">
-                                        <label for="todoImage"></label>
+                                        
                                         <input id="todoImage" name="todoImage" type="file" accept="image/*">
+                                        <img src="{{ todo.image }}" alt="Todo Image">
                                         <img id="imagePreview" src="" alt="Image Preview" style="display: none;"/>
+                                       
                                     </div>
                                     <div class="form-group">
-                                        <label for="editTodoText"></label>
+                                        
                                         <input id="editTodoText" name="todoText" type="text" value="{{ todo.text_content }}">
                                     </div>
+                                    <div class="export">
+                                        <button class="export-box">
+                                            export
+                                            <img src="{% static 'export.png' %}" alt="export" style="width: 16px; height: 16px; margin-right: 0px;">
+                                        </button>
+                                    </div>
                                 </div>
-                                <button type="submit" class="btn-memo">Save</button>
+                               
+                                <button type="submit" class="btn-memo2">Save</button>
                         </form>
                         </div>
                         
@@ -413,14 +497,19 @@ input[type="file"] {
                         <input id="doneTodo" name="doneTodo" type="text" value="{{ dones.content }}" disabled>
                         <input id="doneText" name="doneText" type="text" value="{{ dones.text_content }}" disabled>
                         <input type="hidden" id="doneNum" name="doneNum" value="{{dones.id}}"></input>
-                        <button class="btn btn-close-done">X
+                        <button class="btn btn-close-done"> <img src="{% static 'delete.png' %}" alt="import" style="width: 16px; height: 16px; margin-right: 0px;">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                             <path d="M19.07 4.93a1 1 0 0 0-1.41 0L12 10.59 6.34 4.93a1 1 0 0 0-1.41 1.41L10.59 12l-5.66 5.66a1 1 0 0 0 1.41 1.41L12 13.41l5.66 5.66a1 1 0 0 0 1.41-1.41L13.41 12l5.66-5.66a1 1 0 0 0 0-1.41z"/>
                             </svg>
                         </button>
+                    </form>
+                        
+                        <form action="./" method="POST">
+                            <button type="submit" class="btn btn-delete">X</button>
+                        </form>
                     </div>
                     {% endfor %}
-                </form>
+               
                 
             </div>
         </div>

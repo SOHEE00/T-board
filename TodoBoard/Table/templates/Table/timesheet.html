@@ -56,8 +56,9 @@ a {
 }
 .hidden-content {
     display: none; /* 초기 상태에서는 숨김 */
-    opacity: 0;
-    transition: opacity 0.5s ease; /* 부드러운 텍스트 표시 효과 */
+    transition: all 0.3s ease; /* 애니메이션 효과 추가 */
+    color :rgb(0, 0, 0);
+    margin : 10px;
 }
 .label {
     background-color: #fff4a3;
@@ -70,7 +71,7 @@ a {
 }
 .timebox.open .hidden-content {
     display: inline; /* 열렸을 때 표시 */
-    opacity: 1;
+    
     margin-top: 10px;
     font-weight :105;
     margin: 10px;
@@ -80,7 +81,6 @@ a {
     flex-direction: column; /* 요소들을 세로로 배치 */
     justify-content: flex-start; /* 요소들을 컨테이너의 시작 부분에 정렬 */
     align-items: flex-start; /* 요소들을 컨테이너의 왼쪽(또는 오른쪽)으로 정렬 */
-
 }
 .custom-list {
     list-style: none; /* Remove default list style */
@@ -173,10 +173,7 @@ a {
     background-color: aquamarine;
 }
 .table-box {
-    width: 300px;
-    height: 150px;
-    border-radius: 25px;
-    background-color: rgb(244, 244, 244);
+    
 }
 .date-con {
     display: flex;
@@ -318,15 +315,15 @@ input[type="checkbox"] {
                                 <button class="arrow-button" type="button" onclick="toggleMemoBox(this)">&#9660;</button></label>
                             </label>   
                         </div>
-                        {% endfor %}
+                        
                     </div>
-                
-                </div>
+                    {% endfor %}
+            </div>
              
                 
 
 
-                <div class="container2">
+            <div class="container2">
                     {% for dones in done %}
                     <div class="timebox2">
                         
@@ -357,7 +354,7 @@ input[type="checkbox"] {
                         
                         </div>
                         {% endfor %}
-                    </div>
+            </div>
                     
                     
               

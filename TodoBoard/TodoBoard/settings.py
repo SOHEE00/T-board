@@ -128,5 +128,5 @@ LOGIN_REDIRECT_URL = 'main'  # 로그인 성공 시 이동할 URL
 LOGIN_URL = 'login'  # 로그인 페이지 URL
 
 
-MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'

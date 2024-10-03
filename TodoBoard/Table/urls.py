@@ -17,6 +17,8 @@ Including another URLconf
 from . import views
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('',views.index, name='index'),
@@ -28,10 +30,6 @@ urlpatterns = [
     path('markAsDone/', views.mark_as_done, name='mark_as_done'),
     path('markAsStar/', views.mark_as_star, name='mark_as_star'),
     path('starpage/Delete_Star/',views.Delete_Star, name='Delete_Star'),
-    path('updateUrlPage/<str:url_id>/',views.url_update, name='url_update'),
-    path('Update_url/',views.Update_url, name='Update_url'),
-    path('createURL/',views.Create_URL, name='create_url'),
-    path('deleteurl/',views.Delete_url, name='delete_url'),
     path('deleteDone/',views.Delete_done, name='delete_done'),
     path('timesheet/', views.timesheet, name='timesheet'),
     path('starpage/', views.starpage, name='starpage'),
@@ -40,3 +38,5 @@ urlpatterns = [
     path('login/', views.custom_login_view, name='login'),
     path('loginsheet/',views.loginsheet, name='loginsheet'),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
