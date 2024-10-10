@@ -151,7 +151,12 @@ gap : 30px;
 transform: translateX(85px);
 margin-right: 90px;
 }
-
+.setting-time{
+    position: relative; /* 또는 absolute */
+    margin-top: -40px;
+    margin-left: -900px;
+    margin-right: 595px;
+    }
 .tabel-rabel {
     float: right;
     font-size: 20px;
@@ -172,10 +177,10 @@ margin-right: 90px;
             color : #fa7617; 
             font-weight: bold; 
             position: relative; /* 또는 absolute */
-            top: -20px;
+            top: -40px;
             padding: 5px 15px;
             border-radius: 7px;
-            margin-left: 5px;
+            margin-left: 10px;
         }
 .buttondiv {
     margin-top : -45px;
@@ -404,13 +409,14 @@ input[type="file"] {
             </div>
             
             <div class="table">
-                {% for todo, text in todo_text_pairs %}
+                {% for todo in todos %}
                 
                 <form action="./deleteTodo/" method="GET">
                 <div class="table-box">
                     <div class="table-box2">
                     <input id="todoTable" name="todoTable" type="text" value="{{ todo.content }}" >
                     <input id="todoText" name="todoText" type="text" value="{{ todo.text_content }}" >
+                    <img src="{{ todo.image }}" alt="Todo Image" style="max-width: 30px; height: auto;">
                     <input type="hidden" id="todoNum" name="todoNum" value="{{todo.id}}"></input>
                     </div>
                     <!-- 연필 모양 버튼 -->
@@ -444,34 +450,39 @@ input[type="file"] {
             </div>
             <!-- Todo 목록 -->
             
-            <!-- 모달 창 -->
-                <div id="myModal" class="modal">
+            
+                <!-- 모달 창 -->
+                
+                <div id="myModal{{ todo.id }}" class="modal">
                     <div class="modal-content">
-                       
                         <span class="close">&times;</span>
-                       
-                        <form id="editForm" action="./updateModal/" method="POST" enctype="multipart/form-data">
+                        <form id="editForm{{ todo.id }}" action="./updateModal/" method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
-                            <input type="hidden" id="editTodoId" name="todo_id"  value="{{ todo.id }}">
-                            
+                            <input type="hidden" id="editTodoId{{ todo.id }}" name="todo_id" value="{{ todo.id }}">
                             <div class="modal-textarea">
                                 <div class="form-group">
-                                    <label for="editTodoTable"></label>
-                                    <input id="editTodoTable" name="todoTable" type="text" value="{{ todo.content }}">
+                                    <label for="editTodoTable{{ todo.id }}"></label>
+                                    <div id="mytodoid"></div>
+                                    <input id="editTodoTable{{ todo.id }}" name="todoTable" type="text" value="{{ todo.content }}">
                                 </div>
-                                
+
                                 <div class="div-group">
                                     <div class="form-group left-side">
+                                        <input id="todoImage{{ todo.id }}" name="todoImage" type="file" accept="image/*">
+                                         <img id="editTodoImage" src="{{ todo.image }}" alt="Todo Image" style="max-width: 300px; height: auto; display: none;">
                                         
-                                        <input id="todoImage" name="todoImage" type="file" accept="image/*">
-                                        <img src="{{ todo.image }}" alt="Todo Image">
-                                        <img id="imagePreview" src="" alt="Image Preview" style="display: none;"/>
-                                       
+                                        <img src="{{ todo.image }}" alt="Todo Image" style="max-width: 300px; height: auto;">
+                                        <img id="imagePreview{{ todo.id }}" src="{{ todo.image }}" alt="Image Preview" style="display: none;"/>
+                                    </div>
+                                    <div class="setting-time">
+                                        <form>
+                                            <p><input type="time" id="time" value="" min="" max=""></p>
+                                        </form> 
                                     </div>
                                     <div class="form-group">
-                                        
-                                        <input id="editTodoText" name="todoText" type="text" value="{{ todo.text_content }}">
+                                        <input id="editTodoText{{ todo.id }}" name="todoText" type="text" value="{{ todo.text_content }}">
                                     </div>
+
                                     <div class="export">
                                         <button class="export-box">
                                             export
@@ -479,15 +490,12 @@ input[type="file"] {
                                         </button>
                                     </div>
                                 </div>
-                               
-                                <button type="submit" class="btn-memo2">Save</button>
+                            </div>
+                            <button type="submit" class="btn-memo2">Save</button>
                         </form>
-                        </div>
-                        
                     </div>
                 </div>
-
-
+               
             
 
             <div class="table done">
@@ -504,7 +512,9 @@ input[type="file"] {
                         </button>
                     </form>
                         
-                        <form action="./" method="POST">
+                        <form action="{% url 'move_done_to_todo' dones.id %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="doneNum" value="{{dones.id}}"></input>
                             <button type="submit" class="btn btn-delete">X</button>
                         </form>
                     </div>

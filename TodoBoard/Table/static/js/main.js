@@ -1,50 +1,114 @@
- // todoTable 또는 todoText 클릭 시 모달 띄우기
- document.querySelectorAll('.table-box2').forEach(function(tableBox2) {
-    var todoTable = tableBox2.querySelector('input[id^="todoTable"]');
-    var todoText = tableBox2.querySelector('input[id^="todoText"]');
+// 디버깅을 위한 로그 함수
+function log(message) {
+    console.log(`[Debug] ${message}`);
+}
 
-    todoTable.onclick = function() {
-        openModal(tableBox2);
-    };
-    todoText.onclick = function() {
-        openModal(tableBox2);
-    };
+// 모달 관련 전역 변수
+var currentModal = null;
+
+// todoTable, todoText, 또는 todoimg 클릭 시 모달 띄우기
+document.querySelectorAll('.table-box2').forEach(function(tableBox2) {
+    var clickableElements = tableBox2.querySelectorAll('input[id^="todoTable"], input[id^="todoText"], img[id^="todoimg"]');
+    clickableElements.forEach(function(element) {
+        element.onclick = function(event) { 
+            event.preventDefault();
+            openModal(tableBox2); 
+        };
+    });
 });
 
-// 모달 관련 자바스크립트
-var modal = document.getElementById("myModal");
-var closeModal = document.getElementsByClassName("close")[0];
+function openModal(tableBox2) {
+    log('Opening modal for table-box2');
+    
+    var todoId = tableBox2.querySelector('input[id^="todoNum"]')?.value;
+    if (!todoId) {
+        log('Todo ID not found');
+        return;
+    }
+    log(`Todo ID: ${todoId}`);
 
-// table-box2, todoTable, todoText 클릭 시 모달 띄우기
-document.querySelectorAll(".table-box2, #todoTable, #todoText").forEach(function(element) {
-    element.onclick = function() {
-        var tableBox2 = this.closest('.table-box2');  // .table-box2를 찾아 해당 데이터 속성 참조
+    // 모달 찾기 (여러 가능한 ID 형식을 시도)
+    currentModal = document.getElementById(`myModal${todoId}`) || 
+                   document.querySelector(`[id^="myModal"][id$="${todoId}"]`) ||
+                   document.querySelector(`#myModal-${todoId}`) ||  // 새로운 형식 추가
+                   document.querySelector('.modal'); // 마지막 시도: 첫 번째 모달 선택
+    
+    if (!currentModal) {
+        log(`Modal not found for ID: ${todoId}`);
+        return;
+    }
+    log('Modal found');
 
-        var todoContent = tableBox2.querySelector('#todoTable').value;  // 제목 값
-        var todoText = tableBox2.querySelector('#todoText').value;  // 텍스트 값
-        var todoId = tableBox2.querySelector('#todoNum').value;  // todo id 값
+    // 모달 내용 업데이트
+    updateModalContent(tableBox2, todoId);
 
-        // 모달 내용 업데이트
-        document.getElementById("editTodoTable").value = todoContent;
-        document.getElementById("editTodoText").value = todoText;
-        document.getElementById("editTodoId").value = todoId;
+    // 모달 보이기
+    currentModal.style.display = "block";
+    log('Modal displayed');
+}
 
-        // 모달 보이기
-        modal.style.display = "block";
-    };
+function updateModalContent(tableBox2, todoId) {
+    var todoContent = tableBox2.querySelector('input[id^="todoTable"]')?.value || '';
+    var todoText = tableBox2.querySelector('input[id^="todoText"]')?.value || '';
+    var todoImage = tableBox2.querySelector('img[id^="todoimg"]')?.src;
+    var todoImage = todoImage ? todoImage.src : ''; // img 태그에서 src 값을 가져옴
+
+    var editTodoTable = currentModal.querySelector(`[id^="editTodoTable"][id$="${todoId}"]`) || currentModal.querySelector('[id^="editTodoTable"]');
+    var editTodoText = currentModal.querySelector(`[id^="editTodoText"][id$="${todoId}"]`) || currentModal.querySelector('[id^="editTodoText"]');
+   
+    var editTodoImage = currentModal.querySelector(`[id^="editTodoImage"][id$="${todoId}"]`) || currentModal.querySelector('[id^="editTodoText"]');
+   
+   
+
+    if (editTodoTable) {
+        editTodoTable.value = todoContent;
+        log('Updated todo table content');
+    } else {
+        log('Edit todo table input not found');
+    }
+
+    if (editTodoText) {
+        editTodoText.value = todoText;
+        log('Updated todo text content');
+    } else {
+        log('Edit todo text input not found');
+    }
+    
+    if (editTodoImage && todoImage) {
+        editTodoImage.src = todoImage;
+        editTodoImage.style.display = "block";
+        log('Updated todo image');
+    } else if (editTodoImage) {
+        
+        log('Todo image not found, hiding image element');
+    } else {
+        log('Edit todo image element not found');
+    }
+}
+
+// 모든 닫기 버튼에 이벤트 리스너 추가
+document.querySelectorAll('.close').forEach(function(closeBtn) {
+    closeBtn.onclick = closeCurrentModal;
 });
-
-// 모달 닫기 버튼
-closeModal.onclick = function() {
-    modal.style.display = "none";
-};
 
 // 모달 외부 클릭 시 닫기
 window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
+    if (event.target == currentModal) {
+        closeCurrentModal();
     }
 };
+
+function closeCurrentModal() {
+    if (currentModal) {
+        currentModal.style.display = "none";
+        currentModal = null;
+        log('Modal closed');
+    }
+}
+
+// 초기화 로그
+log('Modal script initialized');
+
     //별 버튼
     $('.btn-star').on('click', function(event) {
         event.preventDefault();  // 기본 form 제출 방지
@@ -101,3 +165,5 @@ document.getElementById('todoImage').addEventListener('change', function(event) 
             reader.readAsDataURL(file);
         }
 });
+
+
